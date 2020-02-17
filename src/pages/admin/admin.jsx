@@ -22,13 +22,14 @@ export default class Login extends Component {
       return <Redirect to='/login' />;
     }
     return (
-      <Layout style={{height: '100%'}}>
+      //  style={{minHeight: '100%'}}
+      <Layout style={{minHeight: '100%'}}>
         <Sider>
           <LeftNav />
         </Sider>
         <Layout>
           <Header>Header</Header>
-          <Content style={{backgroundColor: '#fff'}}>
+          <Content style={{backgroundColor: '#fff', margin: 20}}>
             <Switch>
               <Route path='/home' component={Home} />
               <Route path='/category' component={Category} />
