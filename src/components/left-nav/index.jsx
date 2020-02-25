@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Menu, Icon } from 'antd'
+import { connect } from 'react-redux'
 import logo from '../../assets/images/logo.png'
 import menuList from '../../config/menuConfig'
 import './index.less'
-import memoryUtils from '../../utils/memoryUtils'
+import { setHeadTitle } from '../../redux/actions'
 
 const SubMenu = Menu.SubMenu
 
 class LeftNav extends Component {
 	hasAuth = item => {
 		const { key, isPublic, children } = item
-		const { menus } = memoryUtils.user.role
-		const { username } = memoryUtils.user
+		const { menus } = this.props.user.role
+		const { username } = this.props.user
 		if (username === 'admin' || isPublic || menus.indexOf(key) != -1) {
 			return true
 		} else if (children) {
@@ -60,9 +61,13 @@ class LeftNav extends Component {
 			const { children, key, icon, title } = item
 			if (this.hasAuth(item)) {
 				if (!children) {
+					// 当前要显示的item
+					if (key === path || path.includes(key)) {
+						this.props.setHeadTitle(title)
+					}
 					pre.push(
 						<Menu.Item key={key}>
-							<Link to={key}>
+							<Link to={key} onClick={() => this.props.setHeadTitle(title)}>
 								<Icon type={icon} />
 								<span>{title}</span>
 							</Link>
@@ -127,4 +132,4 @@ class LeftNav extends Component {
 
 // withRouter高阶组件：包装非路由组件，返回一个新的组件
 // 新组件向非路由组件传递3个属性：histroy/location/match
-export default withRouter(LeftNav)
+export default connect(state => ({user:state.user}), { setHeadTitle })(withRouter(LeftNav))

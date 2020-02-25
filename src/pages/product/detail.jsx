@@ -4,6 +4,7 @@ import { Card, Icon, List } from 'antd'
 import LinkButton from '../../components/link-button'
 import { BASE_IMG_URL } from '../../utils/constant'
 import { reqCategory } from '../../api'
+import memoryUtils from '../../utils/memoryUtils'
 
 const Item = List.Item
 
@@ -16,7 +17,7 @@ export default class ProductDetail extends Component {
 	}
 
 	async componentDidMount() {
-		const { pCategoryId, categoryId } = this.props.location.state
+		const { pCategoryId, categoryId } = memoryUtils.product
 		// 一级分类下的商品
 		if (pCategoryId === '0') {
 			const result = await reqCategory(categoryId)
@@ -36,9 +37,12 @@ export default class ProductDetail extends Component {
 			this.setState({ cName1, cName2 })
 		}
 	}
+	componentWillUnmount() {
+		memoryUtils.product = {}
+	}
 
 	render() {
-		const { name, desc, price, detail, imgs } = this.props.location.state
+		const { name, desc, price, detail, imgs } = memoryUtils.product
 		const { cName1, cName2 } = this.state
 
 		const title = (
@@ -78,14 +82,15 @@ export default class ProductDetail extends Component {
 					<Item>
 						<span className='left'>商品图片：</span>
 						<span>
-							{imgs.map(img => (
-								<img
-									src={BASE_IMG_URL + img}
-									key={img}
-									alt='商品图片'
-									className='product-img'
-								/>
-							))}
+							{imgs &&
+								imgs.map(img => (
+									<img
+										src={BASE_IMG_URL + img}
+										key={img}
+										alt='商品图片'
+										className='product-img'
+									/>
+								))}
 						</span>
 					</Item>
 					<Item>

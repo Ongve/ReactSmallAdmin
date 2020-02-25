@@ -3,6 +3,7 @@ import { message, Card, Select, Input, Button, Icon, Table } from 'antd'
 import LinkButton from '../../components/link-button'
 import { reqProducts, reqSearchProducts, reqUpdateStatus } from '../../api'
 import { PAGE_SIZE } from '../../utils/constant'
+import memoryUtils from '../../utils/memoryUtils'
 
 const Option = Select.Option
 
@@ -56,18 +57,10 @@ export default class ProductHome extends Component {
 				title: '操作',
 				render: product => (
 					<span>
-						<LinkButton
-							onClick={() =>
-								this.props.history.push('/product/detail', product)
-							}
-						>
+						<LinkButton onClick={() => this.showDetail(product)}>
 							详情
 						</LinkButton>
-						<LinkButton
-							onClick={() =>
-								this.props.history.push('/product/addupdate', product)
-							}
-						>
+						<LinkButton onClick={() => this.showUpdate(product)}>
 							修改
 						</LinkButton>
 					</span>
@@ -75,6 +68,16 @@ export default class ProductHome extends Component {
 			}
 		]
 	}
+
+	showDetail = product => {
+		memoryUtils.product = product
+		this.props.history.push('/product/detail')
+	}
+	showUpdate = product => {
+		memoryUtils.product = product
+		this.props.history.push('/product/addupdate')
+	}
+
 	// 获取指定页码的列表数据
 	getProducts = async pageNum => {
 		// 保存当前的 pageNum

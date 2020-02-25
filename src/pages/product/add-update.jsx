@@ -5,6 +5,7 @@ import LinkButton from '../../components/link-button'
 import { reqCategories, addOrUpdate } from '../../api'
 import Pic from './PicturesWall'
 import RichText from './rich-text'
+import memoryUtils from '../../utils/memoryUtils'
 
 const { Item } = Form
 const { TextArea } = Input
@@ -129,9 +130,12 @@ class ProductAddUpdate extends PureComponent {
 		this.getCategories('0')
 	}
 	componentWillMount() {
-		const product = this.props.location.state
-		this.isUpdate = !!product
+		const product = memoryUtils.product
+		this.isUpdate = !!product._id
 		this.product = product || {}
+	}
+	componentWillUnmount() {
+		memoryUtils.product = {}
 	}
 
 	render() {

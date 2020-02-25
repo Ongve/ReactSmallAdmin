@@ -4,10 +4,10 @@ import { Modal } from 'antd'
 import { reqWeather } from '../../api'
 import menuList from '../../config/menuConfig'
 import { formatDate } from '../../utils/dateUtils'
-import memoryUtils from '../../utils/memoryUtils'
-import storageUtils from '../../utils/storageUtils'
 import './index.less'
 import LinkButton from '../link-button'
+import { connect } from 'react-redux'
+import { logOut } from '../../redux/actions'
 
 class Header extends Component {
 	state = {
@@ -59,19 +59,17 @@ class Header extends Component {
 			onOk: () => {
 				// 需改成箭头函数，否则没有this
 				// console.log(this);
-
 				// 删除保存数据
-				storageUtils.rmUser()
-				memoryUtils.user = {}
-				this.props.history.replace('/login')
+				this.props.logOut()
 			}
 		})
 	}
 
 	render() {
 		const { currentTime, dayPictureUrl, weather } = this.state
-		const username = memoryUtils.user.username
-		const title = this.getTitle() // 得到当前需要显示的title
+		const username = this.props.user.username
+		// const title = this.getTitle() // 得到当前需要显示的title
+		const title = this.props.headTitle
 
 		return (
 			<div className='header'>
@@ -92,4 +90,7 @@ class Header extends Component {
 	}
 }
 
-export default withRouter(Header)
+export default connect(
+	state => ({ headTitle: state.headTitle, user: state.user }),
+	{ logOut }
+)(withRouter(Header))
