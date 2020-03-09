@@ -4,7 +4,7 @@ import ajax from './ajax'
 import { message } from 'antd'
 
 // const BASE = 'http://localhost:5000'
-const BASE = ''
+const BASE = '/api'
 
 // 登录
 export const reqLogin = (username, password) =>
