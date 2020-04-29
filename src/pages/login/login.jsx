@@ -104,6 +104,6 @@ class Login extends Component {
 		)
 	}
 }
-// 高价函数 + 高阶组件
+// 高阶函数 + 高阶组件
 const WrapLogin = Form.create()(Login)
 export default connect(state => ({ user: state.user }), { login })(WrapLogin)
